@@ -1,0 +1,27 @@
+name: Build and Push Windows Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: pull images
+        run: |
+          docker pull mcr.microsoft.com/windows:ltsc2019
+      - name: test
+        working-directory: .
+        run: |
+          # echo $env:USER
+          # echo $env:TOKEN
+          docker login -u $env:USER -p $env:TOKEN
+          # docker build -f Dockerfile ./
+        env:
+          USER: ${{ secrets.USER }}
+          TOKEN: ${{ secrets.TOKEN }}
+
